@@ -46,7 +46,7 @@ const TestPackagePage = () => {
       <SmythBot
         agentId={AGENT_ID}
         domain={AGENT_DOMAIN}
-        mode="widget"
+        mode="fullscreen"
         enableDebugLogs
         enableMetaMessages
         allowAttachments
