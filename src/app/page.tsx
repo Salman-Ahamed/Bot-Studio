@@ -6,6 +6,7 @@ import { ChatbotCard } from "@/components/chatbot-card";
  */
 const AGENT_IDS = [
   "cmgeknzxreggfnp5r76sucxgu",
+  "cmihqutkz6qoz9cq3tln7ltsr",
   // Add more agent IDs here:
   // "another-agent-id",
   // "yet-another-agent-id",
