@@ -117,4 +117,3 @@ const EmbedPage = () => {
 };
 
 export default EmbedPage;
-
