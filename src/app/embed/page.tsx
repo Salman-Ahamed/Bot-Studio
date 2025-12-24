@@ -1,5 +1,7 @@
 "use client";
 
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
 import { useState } from "react";
 
 /**
@@ -25,17 +27,7 @@ const EmbedPage = () => {
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/80 px-6 py-4 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🖼️</span>
-          <h1 className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-xl font-bold text-transparent">
-            Bot Studio - Embed
-          </h1>
-          <span className="rounded-full border border-cyan-500 bg-cyan-500/20 px-2 py-0.5 text-xs text-cyan-400">
-            Iframe Method
-          </span>
-        </div>
-      </header>
+      <Header agentCount={1} />
 
       {/* Main Content */}
       <main className="flex-1 p-6">
@@ -109,9 +101,7 @@ const EmbedPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800 py-4 text-center text-sm text-zinc-600">
-        Powered by <span className="text-cyan-500">SmythOS</span>
-      </footer>
+      <Footer />
     </div>
   );
 };
