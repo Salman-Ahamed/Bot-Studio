@@ -120,7 +120,7 @@ const Home = () => {
               <div
                 id="smyth-chatbot"
                 className="absolute inset-0 h-full w-full"
-                style={{ maxHeight: "450px", overflow: "scroll" }}
+                style={{ maxHeight: "500px", overflow: "scroll" }}
               />
             </div>
           </div>
