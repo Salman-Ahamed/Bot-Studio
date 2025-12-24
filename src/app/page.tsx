@@ -120,7 +120,7 @@ const Home = () => {
               <div
                 id="smyth-chatbot"
                 className="absolute inset-0 h-full w-full"
-                style={{ maxHeight: "100%", overflow: "hidden" }}
+                style={{ maxHeight: "450px", overflow: "hidden" }}
               />
             </div>
           </div>
