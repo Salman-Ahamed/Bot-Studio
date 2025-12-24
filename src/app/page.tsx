@@ -1,37 +1,7 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { getAgentsFromEnv } from "@/lib/agents";
 import { ChatbotCard } from "./_components/card";
-
-/** Agent configuration type */
-interface Agent {
-  id: string;
-  name: string;
-}
-
-/**
- * Parses agent list from environment variable
- * Format: "id1:name1,id2:name2,..."
- * @returns Array of agent objects with id and name
- */
-function getAgentsFromEnv(): Agent[] {
-  const agentList = process.env.AGENT_LIST ?? "";
-
-  if (!agentList.trim()) {
-    return [];
-  }
-
-  return agentList
-    .split(",")
-    .map((entry) => {
-      const [id, name] = entry.split(":");
-      // Skip invalid entries that don't have both id and name
-      if (!id?.trim() || !name?.trim()) {
-        return null;
-      }
-      return { id: id.trim(), name: name.trim() };
-    })
-    .filter((agent): agent is Agent => agent !== null);
-}
 
 /**
  * Home Page - Server Component

@@ -1,15 +1,7 @@
 "use client";
 
+import { getChatbotUrl } from "@/lib/agents";
 import { useCallback, useState } from "react";
-
-/**
- * Generates the chatbot embed URL for a given agent ID
- * @param agentId - The unique identifier for the agent
- * @returns The full URL for the chatbot iframe
- */
-function getChatbotUrl(agentId: string): string {
-  return `https://${agentId}.agent.pstage.smyth.ai/chatBot?allowAttachments=true`;
-}
 
 interface ChatbotCardProps {
   agent: { id: string; name: string };
@@ -36,7 +28,7 @@ export const ChatbotCard = ({ agent, index }: ChatbotCardProps) => {
   const gradient = gradients[index % gradients.length];
 
   return (
-    <div className="flex h-[500px] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50 transition-all duration-300 hover:border-zinc-700 hover:shadow-xl hover:shadow-black/20">
+    <div className="flex h-[500px] md:h-[600px] xl:h-[700px] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50 transition-all duration-300 hover:border-zinc-700 hover:shadow-xl hover:shadow-black/20">
       <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-4 py-3">
         <div
           className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${gradient}`}

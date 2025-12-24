@@ -1,102 +1,38 @@
-"use client";
-
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { useState } from "react";
+import { getFirstAgentFromEnv } from "@/lib/agents";
+import { EmbedChatbot } from "./_components/embed-chatbot";
 
 /**
- * Agent configuration
- */
-const AGENT_ID = "cmgeknzxreggfnp5r76sucxgu";
-
-/**
- * Generates chatbot URL from agent ID
- */
-function getChatbotUrl(agentId: string): string {
-  return `https://${agentId}.agent.pstage.smyth.ai/chatBot?allowAttachments=true`;
-}
-
-/**
- * Embed Page - Iframe-based Chatbot Integration
- * Uses iframe URL method for embedding (CORS-safe)
+ * Embed Page - Server Component
+ * Loads the first agent from environment and passes to client component
+ * Agent ID is NOT exposed in client-side JavaScript bundle
  */
 const EmbedPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const chatbotUrl = getChatbotUrl(AGENT_ID);
+  // Server-side only - get first agent from env
+  const agent = getFirstAgentFromEnv();
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-white">
       {/* Header */}
-      <Header agentCount={1} />
+      <Header agentCount={agent ? 1 : 0} />
 
       {/* Main Content */}
       <main className="flex-1 p-6">
         <div className="mx-auto max-w-2xl">
-          {/* Chatbot Card */}
-          <div className="flex h-[600px] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50">
-            {/* Card Header */}
-            <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-4 py-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600">
-                <span className="text-lg">🤖</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white">Embed Agent</h3>
-                <p className="text-xs text-zinc-500">{AGENT_ID}</p>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-zinc-800 px-2.5 py-1">
-                <span
-                  className={`h-2 w-2 rounded-full ${
-                    !isLoading
-                      ? "animate-pulse bg-emerald-500 shadow-lg shadow-emerald-500/50"
-                      : "bg-amber-500"
-                  }`}
-                />
-                <span className="text-xs text-zinc-400">
-                  {!isLoading ? "Online" : "Loading..."}
-                </span>
-              </div>
+          {agent ? (
+            <EmbedChatbot agent={agent} />
+          ) : (
+            <div className="flex h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/30">
+              <span className="mb-4 text-5xl opacity-50">🤖</span>
+              <h3 className="mb-2 text-lg font-medium text-zinc-400">
+                No Agent Configured
+              </h3>
+              <p className="text-sm text-zinc-600">
+                Set AGENT_LIST environment variable to get started
+              </p>
             </div>
-
-            {/* Chatbot Container */}
-            <div className="relative flex-1 overflow-hidden">
-              {/* Loading Spinner */}
-              {isLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950">
-                  <div role="status">
-                    <svg
-                      className="h-8 w-8 animate-spin"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="#0ea5e9"
-                        strokeWidth="4"
-                        fill="none"
-                      />
-                      <path
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="4"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Chatbot Iframe */}
-              <iframe
-                src={chatbotUrl}
-                id={`chatbot-iframe-${AGENT_ID}`}
-                className="h-full w-full border-0"
-                onLoad={() => setIsLoading(false)}
-              />
-            </div>
-          </div>
+          )}
         </div>
       </main>
 
