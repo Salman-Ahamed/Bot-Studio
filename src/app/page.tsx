@@ -1,119 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
+import { ChatbotCard } from "./_components/card";
 
-/**
- * Agent configuration
- */
-const AGENT_ID = "cmgeknzxreggfnp5r76sucxgu";
+const AGENTS = [
+  { id: "model-claude-4-5-haiku-383bdfcb-6dd64a5b", name: "Claude 4.5 Haiku" },
+  { id: "cmirlij3o0g1v3b3htsh32xgr", name: "Spoken Master" },
+  { id: "cmihmrm0m6o67cq11h4vqxob5", name: "Bangla Translation & Explanation" },
+  { id: "cmiheubd26klsfzily3x2k2aa", name: "Branch Name Generator" },
+  { id: "cmihqutkz6qoz9cq3tln7ltsr", name: "Pull Request Generator" },
+  { id: "cmihozp4r6pfncq117wzqeg25", name: "Stock Feed Form Assistant" },
+  { id: "cmihni1ks6oxwfzil14xmr4xh", name: "Health Record Form Assistant" },
+  { id: "cmil944nr70e8fzilkr0w632v", name: "Debug Detective" },
+  { id: "cmggd0j0veqyq14h1fb2ylhrd", name: "Coding Assistant" },
+  { id: "cmgeknzxreggfnp5r76sucxgu", name: "Web Search & Image Generator" },
+];
 
-/**
- * Generates chatbot URL from agent ID
- * @param agentId - The unique agent identifier
- * @returns The full chatbot URL
- */
-function getChatbotUrl(agentId: string): string {
-  return `https://${agentId}.agent.pstage.smyth.ai/chatBot?allowAttachments=true`;
-}
-
-/**
- * Bot Studio Home Page - Iframe-based Chatbot Integration
- * Uses iframe URL method for embedding (CORS-safe)
- */
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const chatbotUrl = getChatbotUrl(AGENT_ID);
-
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/80 px-6 py-4 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🖼️</span>
-          <h1 className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-xl font-bold text-transparent">
-            Bot Studio - Embed
-          </h1>
-          <span className="rounded-full border border-cyan-500 bg-cyan-500/20 px-2 py-0.5 text-xs text-cyan-400">
-            Iframe Method
-          </span>
-        </div>
-      </header>
+      <Header agentCount={AGENTS.length} />
 
-      {/* Main Content */}
       <main className="flex-1 p-6">
-        <div className="mx-auto max-w-2xl">
-          {/* Chatbot Card */}
-          <div className="flex h-[600px] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50">
-            {/* Card Header */}
-            <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-4 py-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600">
-                <span className="text-lg">🤖</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white">Embed Agent</h3>
-                <p className="text-xs text-zinc-500">{AGENT_ID}</p>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-zinc-800 px-2.5 py-1">
-                <span
-                  className={`h-2 w-2 rounded-full ${
-                    !isLoading
-                      ? "animate-pulse bg-emerald-500 shadow-lg shadow-emerald-500/50"
-                      : "bg-amber-500"
-                  }`}
-                />
-                <span className="text-xs text-zinc-400">
-                  {!isLoading ? "Online" : "Loading..."}
-                </span>
-              </div>
-            </div>
-
-            {/* Chatbot Container */}
-            <div className="relative flex-1 overflow-hidden">
-              {/* Loading Spinner */}
-              {isLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950">
-                  <div role="status">
-                    <svg
-                      className="h-8 w-8 animate-spin"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="#0ea5e9"
-                        strokeWidth="4"
-                        fill="none"
-                      />
-                      <path
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="4"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Chatbot Iframe */}
-              <iframe
-                src={chatbotUrl}
-                id={`chatbot-iframe-${AGENT_ID}`}
-                className="h-full w-full border-0"
-                onLoad={() => setIsLoading(false)}
-              />
-            </div>
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {AGENTS.map((agent, i) => (
+              <ChatbotCard key={agent.id} agent={agent} index={i} />
+            ))}
           </div>
+
+          {AGENTS.length === 0 && (
+            <div className="flex h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/30">
+              <span className="mb-4 text-5xl opacity-50">🤖</span>
+              <h3 className="mb-2 text-lg font-medium text-zinc-400">
+                No Agents Configured
+              </h3>
+              <p className="text-sm text-zinc-600">
+                Add agent IDs to the AGENT_IDS array to get started
+              </p>
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800 py-4 text-center text-sm text-zinc-600">
-        Powered by <span className="text-cyan-500">SmythOS</span>
-      </footer>
+      <Footer />
     </div>
   );
 };
