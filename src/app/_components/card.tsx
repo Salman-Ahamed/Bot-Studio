@@ -1,5 +1,12 @@
+"use client";
+
 import { useCallback, useState } from "react";
 
+/**
+ * Generates the chatbot embed URL for a given agent ID
+ * @param agentId - The unique identifier for the agent
+ * @returns The full URL for the chatbot iframe
+ */
 function getChatbotUrl(agentId: string): string {
   return `https://${agentId}.agent.pstage.smyth.ai/chatBot?allowAttachments=true`;
 }
