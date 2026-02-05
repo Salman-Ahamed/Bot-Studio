@@ -1,9 +1,9 @@
 "use client";
 
+import { type Agent } from "@/lib/agents";
 import Image from "next/image";
 import Script from "next/script";
 import { useState } from "react";
-import { getAgentDomain, type Agent } from "@/lib/agents";
 
 interface WidgetChatbotProps {
   agent: Agent;
@@ -15,7 +15,7 @@ interface WidgetChatbotProps {
  */
 export const WidgetChatbot = ({ agent }: WidgetChatbotProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const agentDomain = getAgentDomain(agent.id);
+  const agentDomain = "localhost:5020"; // getAgentDomain(agent.id);
 
   /**
    * Initialize chatbot widget after script loads
@@ -117,4 +117,3 @@ export const WidgetChatbot = ({ agent }: WidgetChatbotProps) => {
     </>
   );
 };
-
