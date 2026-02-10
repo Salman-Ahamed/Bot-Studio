@@ -1,5 +1,3 @@
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
 import { getFirstAgentFromEnv } from "@/lib/agents";
 import Image from "next/image";
 import { WidgetChatbot } from "./_components/widget-chatbot";
@@ -14,38 +12,27 @@ const WidgetPage = () => {
   const agent = getFirstAgentFromEnv();
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 text-white">
-      {/* Header */}
-      <Header agentCount={agent ? 1 : 0} mode="Widget" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <div className="mx-auto max-w-2xl">
-          {agent ? (
-            <WidgetChatbot agent={agent} />
-          ) : (
-            <div className="flex h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/30">
-              <Image
-                src="/logo.png"
-                alt="Bot Studio Logo"
-                width={80}
-                height={80}
-                className="mb-4 opacity-50"
-              />
-              <h3 className="mb-2 text-lg font-medium text-zinc-400">
-                No Agent Configured
-              </h3>
-              <p className="text-sm text-zinc-600">
-                Set AGENT_LIST environment variable to get started
-              </p>
-            </div>
-          )}
+    <main className="bg-amber-50 w-full h-screen">
+      {agent ? (
+        <WidgetChatbot agent={agent} />
+      ) : (
+        <div className="flex h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/30">
+          <Image
+            src="/logo.png"
+            alt="Bot Studio Logo"
+            width={80}
+            height={80}
+            className="mb-4 opacity-50"
+          />
+          <h3 className="mb-2 text-lg font-medium text-zinc-400">
+            No Agent Configured
+          </h3>
+          <p className="text-sm text-zinc-600">
+            Set AGENT_LIST environment variable to get started
+          </p>
         </div>
-      </main>
-
-      {/* Footer */}
-      <Footer />
-    </div>
+      )}
+    </main>
   );
 };
 
