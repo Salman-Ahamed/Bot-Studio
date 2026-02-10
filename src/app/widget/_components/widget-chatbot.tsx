@@ -50,6 +50,14 @@ export const WidgetChatbot = ({ agent }: WidgetChatbotProps) => {
 
   return (
     <>
+      {/* Toggle Button - Absolute Top Left */}
+      <button
+        onClick={() => setIsChatOnly(!isChatOnly)}
+        className="absolute left-2 top-2 z-50 rounded bg-blue-500 px-3 py-1.5 text-sm font-medium text-white shadow-md hover:bg-blue-600 transition-colors"
+      >
+        {isChatOnly ? "Chat Only: ON" : "Chat Only: OFF"}
+      </button>
+
       <div id="widget-chatbot" className="h-full w-full" />
 
       {/* Load Chatbot Script */}
