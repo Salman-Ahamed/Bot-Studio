@@ -1,9 +1,8 @@
 "use client";
 
 import { getAgentDomain, type Agent } from "@/lib/agents";
-import Image from "next/image";
 import Script from "next/script";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface WidgetChatbotProps {
   agent: Agent;
@@ -14,104 +13,49 @@ interface WidgetChatbotProps {
  * Handles the interactive widget loading and initialization
  */
 export const WidgetChatbot = ({ agent }: WidgetChatbotProps) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isChatOnly, setIsChatOnly] = useState(true);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const agentDomain = getAgentDomain(agent.id);
 
   /**
-   * Initialize chatbot widget after script loads
+   * Initialize chatbot widget - memoized with useCallback
+   * Re-creates when isChatOnly or agentDomain changes
    */
-  const initChatbot = () => {
+  const initChatbot = useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ChatBot = (window as any).ChatBot;
     if (ChatBot) {
       ChatBot.init({
         domain: agentDomain,
-        isChatOnly: true,
+        isChatOnly: isChatOnly,
         allowAttachments: true,
         enableDebugLogs: true,
         enableMetaMessages: true,
         containerId: "widget-chatbot",
       });
-      setIsLoading(false);
     }
-  };
+  }, [agentDomain, isChatOnly]);
+
+  /**
+   * Re-initialize chatbot when isChatOnly state changes
+   */
+  useEffect(() => {
+    if (isScriptLoaded) initChatbot();
+  }, [isScriptLoaded, initChatbot]);
+
+  /**
+   * Handle script load event
+   */
+  const handleScriptLoad = useCallback(() => setIsScriptLoaded(true), []);
 
   return (
     <>
-      <div className="flex h-[600px] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50">
-        {/* Card Header */}
-        <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-4 py-3">
-          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-red-600 p-0.5">
-            <Image
-              src="/logo.png"
-              alt="Bot Logo"
-              width={36}
-              height={36}
-              className="rounded-lg"
-            />
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-white">{agent.name}</h3>
-            <p className="text-xs text-zinc-500">{agent.id}</p>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-zinc-800 px-2.5 py-1">
-            <span
-              className={`h-2 w-2 rounded-full ${
-                !isLoading
-                  ? "animate-pulse bg-emerald-500 shadow-lg shadow-emerald-500/50"
-                  : "bg-amber-500"
-              }`}
-            />
-            <span className="text-xs text-zinc-400">
-              {!isLoading ? "Online" : "Loading..."}
-            </span>
-          </div>
-        </div>
-
-        {/* Chatbot Container */}
-        <div className="relative flex-1 overflow-hidden bg-zinc-950">
-          {/* Loading Spinner */}
-          {isLoading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950">
-              <div role="status">
-                <svg
-                  className="h-8 w-8 animate-spin"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="#f97316"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="4"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          )}
-
-          {/* Widget Container */}
-          <div
-            id="widget-chatbot"
-            className="absolute inset-0 h-full w-full"
-            style={{ maxHeight: "100%", overflow: "hidden" }}
-          />
-        </div>
-      </div>
+      <div id="widget-chatbot" className="h-full w-full" />
 
       {/* Load Chatbot Script */}
       <Script
         src={`https://${agentDomain}/static/embodiment/chatBot/chatbot-v2.js`}
-        onLoad={initChatbot}
+        onLoad={handleScriptLoad}
         strategy="afterInteractive"
       />
     </>
