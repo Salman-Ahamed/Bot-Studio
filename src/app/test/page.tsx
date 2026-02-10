@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
 
-const TestPage = () => {
-  redirect("/widget");
-};
+const TestPage = () => redirect("/widget");
 
 export default TestPage;
